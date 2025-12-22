@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mysqldb:  # <-- Ändrat namn så det matchar URL:en längre ner
+    image: mysql:8.0
+    container_name: social-mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: socialnetwork_db  # <-- Dubbelkolla att detta matchar vad appen förväntar sig
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  app:  # <-- FIXAT: Nu ligger denna på rätt nivå (2 mellanslag in)
+    build: .
+    container_name: social-network-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysqldb  # <-- Matchar namnet på tjänsten ovan
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/socialnetwork_db?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+volumes:
+  mysql-data:
