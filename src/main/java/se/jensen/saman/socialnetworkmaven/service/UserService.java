@@ -12,10 +12,13 @@ import se.jensen.saman.socialnetworkmaven.exception.DuplicateEmailExceptionHandl
 import se.jensen.saman.socialnetworkmaven.exception.DuplicateUsernameExceptionHandler;
 import se.jensen.saman.socialnetworkmaven.mapper.UserMapper;
 import se.jensen.saman.socialnetworkmaven.model.User;
+import se.jensen.saman.socialnetworkmaven.model.UserFollow;
 import se.jensen.saman.socialnetworkmaven.repository.UserRepository;
 import se.jensen.saman.socialnetworkmaven.util.JwtUtil;
 
+import java.util.Comparator;
 import java.util.List;
+
 
 @Service
 @Transactional
@@ -140,7 +143,65 @@ public class UserService {
 
         return userMapper.fromUserToResponseDTO(savedUser);
 
+    }
+
+    public void  followUser(String username, UserRequestFollowDTO reqDTO){
+
+
+        User userThatPromptedFollow = getUserAndVerifyUsername(reqDTO.theOneThatWantsToFollowId(), username);
+
+        User userThatIsBeingFollowed = userRepository.findById(reqDTO.theOneThatIsBeingFollowedId())
+                .orElseThrow(() -> new OpenApiResourceNotFoundException("User not found"));
+
+
+        userThatPromptedFollow.follow(userThatIsBeingFollowed);
+
+      userRepository.save(userThatPromptedFollow);
+    }
+
+    public void unFollowUser(String username, UserRequestFollowDTO reqDTO){
+
+        User userThatPromptedUnfollow = getUserAndVerifyUsername(reqDTO.theOneThatWantsToFollowId(), username);
+        User userThatIsBeingUnfollowed = userRepository.findById(reqDTO.theOneThatIsBeingFollowedId())
+                .orElseThrow(() -> new OpenApiResourceNotFoundException("User not found"));
+
+        userThatPromptedUnfollow.unfollow(userThatIsBeingUnfollowed);
+
+        userRepository.save(userThatPromptedUnfollow);
+    }
+
+    public UserResponseWithFollowersDTO getFollowers(Long id){
+       User selectedUsersFollowerList = userRepository.findById(id)
+               .orElseThrow(() -> new OpenApiResourceNotFoundException("User not found"));
+
+        List<UserFollowersDTO> followerList = selectedUsersFollowerList.getFollowerList()
+                .stream().sorted(Comparator.comparing(UserFollow::getCreatedAt).reversed())
+                .map(f -> new UserFollowersDTO(f.getFollower().getUsername(), f.getId()))
+                .toList();
+
+       return new UserResponseWithFollowersDTO(selectedUsersFollowerList.getUsername(), followerList);
+    }
+
+    public UserResponseWithFollowingDTO getFollowing (Long id){
+        User selectedUserFollowingList = userRepository.findById(id)
+                .orElseThrow(()-> new OpenApiResourceNotFoundException("User not found"));
+
+        List<UserFollowingDTO> followingDTOList = selectedUserFollowingList.getFollowingList()
+                .stream().sorted(Comparator.comparing(UserFollow::getCreatedAt).reversed())
+                .map(f -> new UserFollowingDTO(f.getFollowed().getUsername(),f.getFollowed().getId()))
+                .toList();
+        return new UserResponseWithFollowingDTO(selectedUserFollowingList.getUsername(), followingDTOList);
+    }
+
+    @Transactional(readOnly = true)
+    public UserWithHabitsResponseDTO getUserWithHabits(Long id){
+        return userRepository.findById(id)
+                .map(userMapper::fromUserToUserWithHabitsDTO)
+                .orElseThrow(()-> new OpenApiResourceNotFoundException("User not found"));
+
 
     }
+
+
 
 }

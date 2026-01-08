@@ -1,31 +1,32 @@
 version: '3.8'
 
 services:
-  mysqldb:  # <-- Ändrat namn så det matchar URL:en längre ner
-    image: mysql:8.0
-    container_name: social-mysql-db
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: socialnetwork_db  # <-- Dubbelkolla att detta matchar vad appen förväntar sig
-    ports:
-      - "3307:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-
-  app:  # <-- FIXAT: Nu ligger denna på rätt nivå (2 mellanslag in)
+  app:
     build: .
     container_name: social-network-app
     ports:
       - "8080:8080"
-    depends_on:
-      - mysqldb  # <-- Matchar namnet på tjänsten ovan
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/socialnetwork_db?allowPublicKeyRetrieval=true&useSSL=false
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      # Här injectar vi variablerna in i Spring Boot
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/${DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    container_name: social-network-db
+    environment:
+
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  mysql-data:
+  postgres_data:

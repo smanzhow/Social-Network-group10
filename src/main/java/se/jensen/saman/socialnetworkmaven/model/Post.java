@@ -2,6 +2,7 @@ package se.jensen.saman.socialnetworkmaven.model;
 
 import jakarta.persistence.*;
 
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,15 +12,21 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, length = 4000)
+
+    @Column(length = 4000, nullable = false)
     private String text;
-    @Column(nullable = false)
+
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
-    @Column
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+
 
     public Post() {
 

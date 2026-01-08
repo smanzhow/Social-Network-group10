@@ -12,6 +12,7 @@ import se.jensen.saman.socialnetworkmaven.dto.*;
 import se.jensen.saman.socialnetworkmaven.service.UserService;
 
 import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -83,9 +84,9 @@ public class UserController {
         return ResponseEntity.ok(loginRespDTO);
     }
 
-    @GetMapping("/{userId}/posts")
-    public ResponseEntity<UserWithPostsResponseDTO> getUserWithPosts(@PathVariable Long userId) {
-        UserWithPostsResponseDTO userWithPostsResponseDTO = userService.getUserWithPosts(userId);
+    @GetMapping("/{id}/posts")
+    public ResponseEntity<UserWithPostsResponseDTO> getUserWithPosts(@PathVariable Long id) {
+        UserWithPostsResponseDTO userWithPostsResponseDTO = userService.getUserWithPosts(id);
 
         return ResponseEntity.ok(userWithPostsResponseDTO);
     }
@@ -100,6 +101,37 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> changePasswordUpdate(@PathVariable Long id, @AuthenticationPrincipal String username, @Valid @RequestBody UserRequestPasswordChangeDTO reqDTO) {
         UserResponseDTO respDTO = userService.changePasswordUpdate(id, username, reqDTO);
         return ResponseEntity.ok(respDTO);
+    }
+
+    @PostMapping("/{id}/profile/follow")
+    public ResponseEntity<Void> followUser(@PathVariable Long id, @AuthenticationPrincipal String username, @RequestBody UserRequestFollowDTO reqDTO) {
+        userService.followUser(username, reqDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/profile/unfollow")
+    public ResponseEntity<Void> unFollowUser(@PathVariable Long id, @AuthenticationPrincipal String username, @RequestBody UserRequestFollowDTO reqDTO) {
+        userService.unFollowUser(username, reqDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/profile/followers")
+    public ResponseEntity<UserResponseWithFollowersDTO> getFollowers(@PathVariable Long id){
+      UserResponseWithFollowersDTO respDTO = userService.getFollowers((id));
+        return ResponseEntity.ok(respDTO);
+    }
+
+    @GetMapping("/{id}/profile/following")
+    public ResponseEntity<UserResponseWithFollowingDTO> getFollowing(@PathVariable Long id){
+        UserResponseWithFollowingDTO respDTO = userService.getFollowing((id));
+        return ResponseEntity.ok(respDTO);
+    }
+
+    @GetMapping("/{id}/profile/habits")
+    public ResponseEntity<UserWithHabitsResponseDTO> getUserWithHabits(@PathVariable Long id){
+        UserWithHabitsResponseDTO respDTO = userService.getUserWithHabits(id);
+
+        return  ResponseEntity.ok(respDTO);
     }
 }
 
