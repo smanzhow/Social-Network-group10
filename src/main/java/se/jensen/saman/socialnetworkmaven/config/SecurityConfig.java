@@ -38,7 +38,9 @@ public class SecurityConfig {
 
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // Publika endpoints
+
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/users/login").permitAll()
 
                         .requestMatchers("/users/register").permitAll()
