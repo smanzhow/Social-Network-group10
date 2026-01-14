@@ -20,13 +20,8 @@ public interface UserMapper {
 
     UserResponseWithFollowersDTO fromUserToUserWithFollowersDTO(User user);
 
-    @Mapping(source = "habits", target = "habitList")
 
-    UserWithHabitsResponseDTO fromUserToUserWithHabitsDTO(User user);
 
-    @Mapping(source = "user.id", target = "userId")
-
-    HabitResponseDTO fromHabitToRespDTO(Habit habit);
 
 
     @Mapping(target = "role", constant = "USER")

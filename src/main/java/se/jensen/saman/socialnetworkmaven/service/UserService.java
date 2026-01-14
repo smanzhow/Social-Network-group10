@@ -193,15 +193,4 @@ public class UserService {
         return new UserResponseWithFollowingDTO(selectedUserFollowingList.getUsername(), followingDTOList);
     }
 
-    @Transactional(readOnly = true)
-    public UserWithHabitsResponseDTO getUserWithHabits(Long id){
-        return userRepository.findById(id)
-                .map(userMapper::fromUserToUserWithHabitsDTO)
-                .orElseThrow(()-> new OpenApiResourceNotFoundException("User not found"));
-
-
-    }
-
-
-
 }
