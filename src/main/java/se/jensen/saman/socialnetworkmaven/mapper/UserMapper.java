@@ -2,7 +2,6 @@ package se.jensen.saman.socialnetworkmaven.mapper;
 
 import org.mapstruct.*;
 import se.jensen.saman.socialnetworkmaven.dto.*;
-import se.jensen.saman.socialnetworkmaven.model.Habit;
 import se.jensen.saman.socialnetworkmaven.model.User;
 import se.jensen.saman.socialnetworkmaven.model.UserFollow;
 

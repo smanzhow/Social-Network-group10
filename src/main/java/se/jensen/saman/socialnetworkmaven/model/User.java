@@ -43,8 +43,6 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Habit> habitList;
 
     @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserFollow> followingList = new HashSet<>();
@@ -151,13 +149,6 @@ public class User implements UserDetails {
         this.profileImagePath = profileImagePath;
     }
 
-    public List<Habit> getHabits() {
-        return habitList;
-    }
-
-    public void setHabits(List<Habit> habitList) {
-        this.habitList = habitList;
-    }
 
     public Set<UserFollow> getFollowingList() {
         return followingList;
@@ -211,11 +202,4 @@ public class User implements UserDetails {
         this.posts = posts;
     }
 
-    public List<Habit> getHabitList() {
-        return habitList;
-    }
-
-    public void setHabitList(List<Habit> habitList) {
-        this.habitList = habitList;
-    }
 }

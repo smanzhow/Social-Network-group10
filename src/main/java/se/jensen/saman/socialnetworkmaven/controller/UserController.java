@@ -126,13 +126,6 @@ public class UserController {
         UserResponseWithFollowingDTO respDTO = userService.getFollowing((id));
         return ResponseEntity.ok(respDTO);
     }
-
-    @GetMapping("/{id}/profile/habits")
-    public ResponseEntity<UserWithHabitsResponseDTO> getUserWithHabits(@PathVariable Long id){
-        UserWithHabitsResponseDTO respDTO = userService.getUserWithHabits(id);
-
-        return  ResponseEntity.ok(respDTO);
-    }
 }
 
 

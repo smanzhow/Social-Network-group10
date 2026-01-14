@@ -43,4 +43,4 @@ jobs:
           context: .
           push: true
 
-          tags: ${{ secrets.DOCKER_USERNAME }}/social-network-maven:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/social-network-group10:latest
