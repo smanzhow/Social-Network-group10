@@ -16,7 +16,6 @@ public interface UserMapper {
 
     UserResponseDTO fromUserToResponseDTO(User user);
 
-    UserWithPostsResponseDTO fromUserToUserWithPostsDTO(User user);
 
     UserResponseWithFollowersDTO fromUserToUserWithFollowersDTO(User user);
 
