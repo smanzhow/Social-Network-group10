@@ -2,13 +2,11 @@ package se.jensen.saman.socialnetworkmaven.model;
 
 import jakarta.persistence.*;
 
-
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name = "posts")
-public class Post {
+@Table(name = "comments")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,35 +18,20 @@ public class Post {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @ManyToOne
+    @JoinColumn(name = "post_id",nullable = false)
+    private Post post;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private List<Comment> comments;
-
-
-
-
-    public Post() {
-
-    }
-
-    public Post(String text, LocalDateTime createdAt, User user) {
+    public Comment(Long id, String text, LocalDateTime createdAt, Post post, User user) {
+        this.id = id;
         this.text = text;
         this.createdAt = createdAt;
+        this.post = post;
         this.user = user;
-    }
-
-
-    public Post(String text, LocalDateTime createdAt, LocalDateTime updatedAt) {
-
-        this.text = text;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
@@ -75,12 +58,12 @@ public class Post {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public Post getPost() {
+        return post;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     public User getUser() {

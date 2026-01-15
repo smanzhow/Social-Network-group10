@@ -20,9 +20,6 @@ public interface UserMapper {
     UserResponseWithFollowersDTO fromUserToUserWithFollowersDTO(User user);
 
 
-
-
-
     @Mapping(target = "role", constant = "USER")
     @Mapping(target = "password", ignore = true)
     void updateUserFromReqDTO(UserRequestDTO userReqDTO, @MappingTarget User user);

@@ -11,9 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import se.jensen.saman.socialnetworkmaven.dto.CommentRequestDTO;
+import se.jensen.saman.socialnetworkmaven.dto.CommentResponseDTO;
 import se.jensen.saman.socialnetworkmaven.dto.PostRequestDTO;
 import se.jensen.saman.socialnetworkmaven.dto.PostResponseDTO;
 import se.jensen.saman.socialnetworkmaven.model.Post;
+import se.jensen.saman.socialnetworkmaven.service.CommentService;
 import se.jensen.saman.socialnetworkmaven.service.PostService;
 
 import java.util.List;
@@ -26,11 +29,12 @@ public class PostController {
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
     private final PostService postService;
+    private final CommentService commentService;
 
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, CommentService commentService) {
         this.postService = postService;
-
+        this.commentService = commentService;
     }
 
     @GetMapping
@@ -83,5 +87,14 @@ public class PostController {
         return ResponseEntity.ok(respDTO);
 
     }
+
+    @PostMapping("/{postId}/comments")
+    public ResponseEntity<CommentResponseDTO> postCommentOnPost (@PathVariable Long postId, @Valid @RequestBody CommentRequestDTO reqDto){
+      CommentResponseDTO commentResponseDTO = commentService.postCommentOnPost(postId, reqDto);
+      return ResponseEntity.ok(commentResponseDTO);
+    }
+
+
+
 
 }

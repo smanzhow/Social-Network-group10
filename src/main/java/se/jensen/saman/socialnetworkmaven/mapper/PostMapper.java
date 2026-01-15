@@ -11,7 +11,8 @@ import se.jensen.saman.socialnetworkmaven.model.User;
 
 import java.time.LocalDateTime;
 
-@Mapper (componentModel = "spring", imports = LocalDateTime.class)
+@Mapper (componentModel = "spring",
+        imports = LocalDateTime.class)
 public interface PostMapper {
     @Mapping(source = "user", target = "user")
     @Mapping(target = "id", ignore = true)

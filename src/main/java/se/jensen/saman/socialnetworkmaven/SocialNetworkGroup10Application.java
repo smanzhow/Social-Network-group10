@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SocialNetworkMavenApplication {
+public class SocialNetworkGroup10Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(SocialNetworkMavenApplication.class, args);
+        SpringApplication.run(SocialNetworkGroup10Application.class, args);
     }
 
 }

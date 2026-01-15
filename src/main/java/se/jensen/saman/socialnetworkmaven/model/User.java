@@ -51,6 +51,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "followed")
     private Set<UserFollow> followerList = new HashSet<>();
 
+    @OneToMany
+    private List<Comment> comments;
+
 
     public User() {
 
