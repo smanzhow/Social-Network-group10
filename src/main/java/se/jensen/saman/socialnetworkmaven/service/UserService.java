@@ -116,11 +116,6 @@ public class UserService {
 
     }
 
-    @Transactional(readOnly = true)
-    public UserWithPostsResponseDTO getUserWithPosts(Long id) {
-        return userRepository.findById(id).map(userMapper::fromUserToUserWithPostsDTO)
-                .orElseThrow(() -> new OpenApiResourceNotFoundException("User not found"));
-    }
 
     public UserResponseChangeProfileDTO changeProfileUpdate(Long id, String username, UserRequestChangeProfileDTO reqDTO) {
         User user = getUserAndVerifyUsername(id, username);

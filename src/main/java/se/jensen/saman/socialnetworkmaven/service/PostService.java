@@ -1,7 +1,10 @@
 package se.jensen.saman.socialnetworkmaven.service;
 
 
+
 import org.springdoc.api.OpenApiResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -81,6 +84,35 @@ public class PostService {
             throw new AccessDeniedException("Access denied");
         }
         return post;
-
     }
+
+
+    public Page<PostResponseDTO> getPosts(Long userId, Pageable pageable){
+        Page<Post> postPage;
+        if (userId != null){
+           postPage =  postRepository.findByUserId(userId, pageable);
+        } else {
+            postPage = postRepository.findAll(pageable);
+        }
+        return postPage.map(postMapper::postToRespDTO);
+    }
+
+    public Page<PostResponseDTO> getPosts(Pageable pageable) {
+        return postRepository.findAll(pageable)
+                .map(post ->
+                        new PostResponseDTO(post.getId(),
+                                post.getText(),
+                                post.getCreatedAt(),
+                                post.getUpdatedAt(),
+                                post.getUser().getUsername(),
+                                post.getUser().getId()));
+    }
+
+//Long id,
+//                              String text,
+//                              LocalDateTime createdAt,
+//                              LocalDateTime updatedAt,
+//                              String authorUsername,
+//                              Long userId
+
 }

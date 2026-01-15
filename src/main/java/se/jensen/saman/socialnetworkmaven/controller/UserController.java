@@ -84,12 +84,6 @@ public class UserController {
         return ResponseEntity.ok(loginRespDTO);
     }
 
-    @GetMapping("/{id}/posts")
-    public ResponseEntity<UserWithPostsResponseDTO> getUserWithPosts(@PathVariable Long id) {
-        UserWithPostsResponseDTO userWithPostsResponseDTO = userService.getUserWithPosts(id);
-
-        return ResponseEntity.ok(userWithPostsResponseDTO);
-    }
 
     @PutMapping("/{id}/profile")
     public ResponseEntity<UserResponseChangeProfileDTO> changeProfileUpdate(@PathVariable Long id, @AuthenticationPrincipal String username, @Valid @RequestBody UserRequestChangeProfileDTO reqDTO) {

@@ -41,6 +41,7 @@ public class User implements UserDetails {
     private String profileImagePath;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OrderBy ("createdAt DESC")
     private List<Post> posts;
 
 
