@@ -26,6 +26,10 @@ public class Comment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    public Comment (){
+
+    }
+
     public Comment(Long id, String text, LocalDateTime createdAt, Post post, User user) {
         this.id = id;
         this.text = text;

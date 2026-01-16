@@ -51,7 +51,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "followed")
     private Set<UserFollow> followerList = new HashSet<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
 
